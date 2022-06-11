@@ -7,7 +7,7 @@ const case3 = test.querySelector('.case3')
 const case4 = test.querySelector('.case4')
 const regLetter = /[A-ZА-ЯЁ]/g
 const regNumber = /\d/g
-const regSymbol = /[.,:;()]/g
+const regSymbol = /[^A-Za-zА-Яа-яЁё0-9]/g
 const regAmount = /.{8}/g
 
 from.addEventListener('input', function (event) {
