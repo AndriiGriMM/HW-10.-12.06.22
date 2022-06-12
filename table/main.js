@@ -7,6 +7,7 @@ function UserTable(params) {
     this.formSubmit = function (event) {
         event.preventDefault();
         const currentId = params.form.elements['id'].value;
+
         if (currentId) {
             this.updateUser({
                 id: params.form['id'].value,
@@ -27,6 +28,7 @@ function UserTable(params) {
 
     this.addUser = function (user) {
         const users = JSON.parse(localStorage.getItem('users'));
+
         this.userTemplate(user)
         params.form.reset();
         const currentUsers = users || [];
@@ -36,14 +38,14 @@ function UserTable(params) {
 
     this.updateUser = function (user) {
         const users = JSON.parse(localStorage.getItem('users'));
-        const newUsers = users.map(item => {if (item.id === Number(user.id)) {return user;}return item;});
+        const newUsers = users.map(item => { if (item.id === Number(user.id)) { return user; } return item; });
         params.content.innerHTML = '';
         newUsers.forEach((newUser) => {
             this.userTemplate(newUser);
         });
         localStorage.setItem('users', JSON.stringify(newUsers));
     }
-    
+
     this.loadUser = function () {
         const users = JSON.parse(localStorage.getItem('users'));
         if (users) {
@@ -52,7 +54,7 @@ function UserTable(params) {
             })
         }
     }
-    
+
     this.userTemplate = function (user) {
         params.content.insertAdjacentHTML('beforeend', (
             `<tr id="${user.id}">
@@ -74,6 +76,7 @@ function UserTable(params) {
         const deleteButton = currentElement.querySelector('.js--delete');
 
         const editUser = function () {
+
             const form = params.form;
             form.classList.add('open');
             form.elements['name'].value = user.name;
@@ -86,32 +89,19 @@ function UserTable(params) {
             params.user.innerHTML = JSON.stringify(user, undefined, 2);
         }
 
-        const deleteUser = function (user) {
-            let arg = document.querySelector(`[id="${user.id}"]`);
+        const deleteUser = function () {
             params.content.removeChild(currentElement)
-            const users = JSON.parse(localStorage.getItem('users'));
-            const newUsers = users.map(item => {
-                if
-                (item.id === Number(user.id)) {
-                    return user;
-                }
-                return item;
-            });
-            let someUsers = newUsers.filter(item => item.id < currentElement)
-            console.log (user)
-            console.log (someUsers)
-            console.log (currentElement)
- 
-            // localStorage.setItem('users', JSON.stringify(newUsers));
-            // localStorage.removeItem(`users.${user.id}`);
+            const users = JSON.parse(localStorage.getItem('users')).filter((item) => item.id !== user.id)
+            localStorage.setItem('users', JSON.stringify(users))
         }
 
         showButton.addEventListener('click', showUser);
         editButton.addEventListener('click', editUser);
-        deleteButton.addEventListener ('click', deleteUser)
+        deleteButton.addEventListener('click', deleteUser)
     }
 
     this.loadUser();
+
 }
 
 const userTable = new UserTable({
